@@ -3,9 +3,24 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-    const users = await prisma.user.findMany()
-    console.log(users)
-}
+    await prisma.user.deleteMany()
+    const user = await prisma.user.create({
+      data: {
+        name: "Kell",
+        email: "Kell@test.com",
+        age: 27,
+        userPreference: {
+          create: {
+            emailUpdates: true,
+          }
+        }
+      },
+      include: {
+        userPreference: true,
+      }
+    })
+    console.log(user)
+  }
 
 main()
   .then(async () => {
